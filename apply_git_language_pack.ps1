@@ -104,7 +104,7 @@ New-Item -ItemType Directory -Path $backupDir | Out-Null
 
 $filesToBackup = @(
     "$gitInstallDir\mingw64\share\locale\zh_TW\LC_MESSAGES\git.mo",
-    "$gitInstallDir\mingw64\share\git-gui\lib\msgs\zh_tw.msg",
+    # "$gitInstallDir\mingw64\share\git-gui\lib\msgs\zh_tw.msg",
     "$gitInstallDir\mingw64\share\gitk\lib\msgs\zh_tw.msg"
 )
 
