@@ -75,11 +75,11 @@ log_warn "已停用繁體中文的gitk檢查，因為Git並未提供"
 # 2. 定義繁體中文的目標目錄 (zh_TW)
 modir="$outdir/mingw64/share/locale/zh_TW/LC_MESSAGES"
 # guidir="$outdir/mingw64/share/git-gui/lib/msgs"
-gitkdir="$outdir/mingw64/share/gitk/lib/msgs"
+# gitkdir="$outdir/mingw64/share/gitk/lib/msgs"
 
 log_info "建立輸出目錄結構..."
 # mkdir -p "$modir" "$guidir" "$gitkdir"
-mkdir -p "$modir" "$gitkdir"
+mkdir -p "$modir"
 
 log_info "編譯本地化檔案..."
 log_info "編譯 git.mo..."
