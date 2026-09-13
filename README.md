@@ -1,72 +1,81 @@
-# git-for-windows 中文语言包使用指南
+# git-for-windows 繁體中文語言包教學
 
 ![example](./assets/example.png)
 
-本项目为 [`git-for-windows`](https://github.com/git-for-windows/git) 提供中文语言支持，您可以通过以下方法安装并使用。
+這個專案為 [`git-for-windows`](https://github.com/git-for-windows/git) 提供繁體中文的語言包支援，您可以透過以下教學來完成繁體中文版本的執行：
 
-## 前提条件
+## 前置條件
 
-首先，需要设置系统默认编码为 utf-8。具体方法如下：
+首先，您需要對Windows系統啟用UTF-8語言的支援。您可以在以下路徑找到該設定：
 
-请转到 Windows“设置”>“时间和语言”>“语言和区域”>“管理语言设置”>“更改系统区域设置”，然后选中“Beta：使用 Unicode UTF-8 获得全球语言支持”。 然后重新启动电脑，使更改生效。
+［系統設定］>［時間與語言］>［語言與地區］，展開［Windows顯示語言］設定項，啟用
 
-## 安装方法
+> 搶鮮版 (Beta): 使用 Unicode UTF-8 提供全球語言支援
 
-### 方法一：一键安装脚本（推荐）
+完成後，請重新啟動電腦
 
-以管理员身份运行 PowerShell，然后执行：
+## 安裝方式
+
+### 安裝腳本（建議）
+
+以系統管理員權限啟動Windows Powershell，並執行以下指令
 
 ```powershell
-iwr -useb https://cdn.jsdelivr.net/gh/zkl2333/git-for-windows-zh@main/install.ps1 | iex
+iwr -useb https://cdn.jsdelivr.net/gh/510208/git-for-windows-zh_TW@main/install.ps1 | iex
 ```
 
-> **提示**：
-> - 如果未以管理员身份运行，脚本会自动提示您提升权限
-> - 兼容 PowerShell 5.1 和 7+
-> - 如果遇到执行策略限制，请先运行 `Set-ExecutionPolicy Bypass -Scope Process -Force`
+> [!TIP]
+> - 如果忘記使用管理員權限執行，系統會通知您
+> - 此腳本相容於Powershell 5與7+
+> - 如果遇到如下錯誤，請嘗試執行 `Set-ExecutionPolicy Bypass -Scope Process -Force`：
+> ```
+> PS C:\Users\MISANA> iwr -useb https://cdn.jsdelivr.net/gh/510208/git-for-windows-zh_TW@main/install.ps1 | iex
+> .\Invoke-IcmpDownload.ps1 : 因為這個系統上已停用指令碼執行，所以無法載入 ....... 檔案。如需詳細資訊，
+> 請參閱 about_Execution_Policies，網址為 https:/go.microsoft.com/fwlink/?LinkID=135170。
+> ```
 
-#### 验证安装
+#### 驗證是否安裝成功
 
-关闭所有 Git Bash 窗口，重新打开后运行：
+將所有Git Bash是窗關閉並重開，執行以下指令
 
 ```bash
 git status
 ```
 
-若输出为中文，安装成功。
+正常情況下應該會顯示中文版的輸出
 
-### 方法二：手动安装
+### 手動安裝
 
-#### 步骤 1：下载语言文件
+#### 1. 下載語言文件
 
-1. 访问 [Releases](https://github.com/zkl2333/git-for-windows-zh/releases) 页面。
-2. 下载与您 Git 版本对应的语言文件 ZIP 包。
+1. 前往 [Releases](https://github.com/510208/git-for-windows-zh_TW/releases)
+2. 下載與您電腦中Git版本相對應的語言包
 
-#### 步骤 2：解压并复制文件
+#### 2. 解壓縮並複製文件
 
-1. 解压 ZIP 包。
-2. 将解压后的 `mingw64` 文件夹复制到 Git 安装目录（默认 `C:\Program Files\Git`），选择“替换目标中的文件”。
+1. 解開ZIP壓縮檔。
+2. 將解壓出的 `mingw64` 資料夾複製到Git的安裝位置（預設應該是 `C:\Program Files\Git`），如果詢問就選擇取代目的地的資料夾
 
-#### 步骤 3：设置环境变量
+#### 3. 設定環境變數
 
-将 Git bash 环境中的 `LANG` 环境变量设置为 `zh_CN.UTF-8`：
+將 Git bash 環境中的 `LANG` 環境變數設定為 `zh_CN.UTF-8`：
 
 ##### 方式 1：bash profile
 
-1. 打开`$env:USERPROFILE\.bash_profile`。
-2. 在文件适当位置添加一行`export LANG=zh_CN`，通常是在`test -f ~/.bashrc && . ~/.bashrc`之后。
+1. 開啟`$env:USERPROFILE\.bash_profile`。
+2. 在檔案適當位置新增一行`export LANG=zh_CN`，通常是在`test -f ~/.bashrc && . ~/.bashrc`之後。
 
-##### 方式 2：系统环境变量
+##### 方式 2：系統環境變數
 
-1. 右键“此电脑”，选择“属性”。
-2. 点击“高级系统设置” > “环境变量”。
-3. 新建环境变量：
-   - **变量名**：`LANG`
-   - **变量值**：`zh_CN.UTF-8`
+1. 右鍵［本機］，選擇［內容］。
+2. 點選［進階系統設定］ > ［環境變數］。
+3. 新建環境變數：
+   - **變數名稱**：`LANG`
+   - **變數值**：`zh_CN.UTF-8`
 
-#### 步骤 4：配置 Git 编码
+#### 4. 設定 Git 編碼
 
-在 Git Bash 中执行：
+在 Git Bash 中執行：
 
 ```bash
 git config --global core.quotepath false
@@ -75,50 +84,63 @@ git config --global i18n.commitencoding utf-8
 git config --global i18n.logoutputencoding utf-8
 ```
 
-#### 步骤 5：重启并验证
+#### 5. 重新啟動並驗證
 
-重启 Git Bash，运行 `git status`，若输出为中文，安装完成。
+重啟 Git Bash，運行 `git status`，若輸出為中文，安裝完成。
 
-## 常见问题
+## 常見問題
 
-- **输出仍为英文？**
+<details>
+<summary>輸出仍為英文？</summary>
 
-  - 确认 `LANG` 环境变量已设置为 `zh_CN.UTF-8`。请注意，在某次**版本更新**后，**全新安装**的 git 包装器不再读取 bash profile，如果您使用 Powershell 等其他 Shell，请考虑在您的 Shell profile 中添加对应环境变量设置语句。
-  - 确认语言文件正确安装。
-  - 重启 Git Bash。
+  - 確認 `LANG` 環境變數已設定為 `zh_CN.UTF-8`。請注意，在某次**版本更新**後，**全新安裝**的 git 包裝器不再讀取 bash profile，如果您使用 Powershell 等其他 Shell，請考慮在您的 Shell profile 中新增對應環境變數設定語句。
+  - 確認語言檔案正確安裝。
+  - 重啟 Git Bash。
 
-- **出现乱码？**
+</details>
 
-  - 确认已配置 Git 编码为 UTF-8。
+<details>
+<summary>出現亂碼？</summary>
 
-- **想恢复英文界面？**
-  - 删除语言文件和 `LANG` 环境变量。
-  - 重启 Git Bash。
+  - 確認已配置 Git 編碼為 UTF-8。
 
-## 注意事项
+</details>
 
-- **版本匹配**：确保语言文件版本与 Git 版本一致。
-- **备份**：安装前可备份原始文件。
+<details>
+<summary>想恢復英文版？</summary>
 
-## 卸载语言包
+  - 刪除語言檔案和 `LANG` 環境變數。
+  - 重啟 Git Bash。
 
-1. 删除 Git 安装目录中的中文语言文件：
+</details>
+
+## 注意事項
+
+- **版本符合**：確保語言檔案版本與 Git 版本一致。
+- **備份**：安裝前可備份原始檔案。
+
+## 解除安裝語言包
+
+1. 移除先前建立的檔案：
    - `mingw64\share\locale\zh_CN\LC_MESSAGES\git.mo`
    - `mingw64\share\git-gui\lib\msgs\zh_cn.msg`
    - `mingw64\share\gitk\lib\msgs\zh_cn.msg`
-2. 删除或修改 `LANG` 环境变量。
-3. 重启 Git Bash。
+2. 刪除或修改 `LANG` 環境變數。
+3. 重新啟動Git Bash。
 
 ---
 
-如有疑问，欢迎在 [本仓库](https://github.com/zkl2333/git-for-windows-zh) 提交 Issue。
+如有疑問，歡迎在 [本儲存庫](https://github.com/510208/git-for-windows-zh_TW) 提交 Issue。
 
-## 许可证
+## 許可證
 
-本项目采用 MIT 许可证，详情参见 [LICENSE](https://github.com/zkl2333/git-for-windows-zh/blob/main/LICENSE)。
+本專案採用 MIT 許可證，詳情請參閱 [LICENSE](https://github.com/510208/git-for-windows-zh_TW/blob/main/LICENSE)。
 
-## 致谢
+## 致謝
 
-- 感谢 [`git-for-windows/git`](https://github.com/git-for-windows/git) 项目。
-- 感谢 [`toyobayashi/git-zh`](https://github.com/toyobayashi/git-zh) 项目。
-- 感谢 GitHub Actions 社区。
+> [!NOTE]
+> 本專案原始碼大部分由[zkl2333/git-for-windows-zh](https://github.com/zkl2333/git-for-windows-zh)提供，非常感謝
+
+- 感謝 [`git-for-windows/git`](https://github.com/git-for-windows/git) 專案。
+- 感謝 [`toyobayashi/git-zh`](https://github.com/toyobayashi/git-zh) 專案。
+- 感謝 GitHub Actions 社群。
