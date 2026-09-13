@@ -1,4 +1,4 @@
-name: 测试 PowerShell 安装脚本
+name: 測試 PowerShell 安裝腳本
 
 on:
   push:
@@ -15,11 +15,11 @@ on:
       - 'install.ps1'
       - 'check_syntax_detailed.ps1'
       - '.github/workflows/test-script.yml'
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:  # 允許手動觸發
 
 jobs:
   test-powershell-script:
-    name: 测试 PowerShell 脚本 (PowerShell ${{ matrix.powershell-version }})
+    name: 測試 PowerShell 腳本 (PowerShell ${{ matrix.powershell-version }})
     runs-on: windows-latest
     timeout-minutes: 30
 
@@ -29,19 +29,19 @@ jobs:
         powershell-version: ['5.1', '7.2']
 
     steps:
-      - name: 检出代码
+      - name: 檢出代碼
         uses: actions/checkout@v6
 
-      - name: 验证 Git 环境
+      - name: 驗證 Git 環境
         run: |
-          # 设置编码
+          # 設置編碼
           [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
           $OutputEncoding = [System.Text.UTF8Encoding]::new()
           $PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
-          Write-Host "检查系统 Git 环境..."
+          Write-Host "檢查系統 Git 環境..."
 
-          # 验证 Git 是否可用
+          # 驗證 Git 是否可用
           try {
             $gitCommand = Get-Command git -ErrorAction Stop
             Write-Host "✅ 找到 Git: $($gitCommand.Source)"
@@ -49,22 +49,22 @@ jobs:
             $gitVersion = git --version
             Write-Host "✅ Git 版本: $gitVersion"
 
-            # 获取 Git 安装目录
+            # 獲取 Git 安裝目錄
             $gitPath = $gitCommand.Source
             $gitDir = Split-Path $gitPath -Parent
             $gitInstallDir = Split-Path $gitDir -Parent
-            Write-Host "✅ Git 安装目录: $gitInstallDir"
+            Write-Host "✅ Git 安裝目錄: $gitInstallDir"
 
           } catch {
-            Write-Host "❌ Git 环境检查失败: $($_.Exception.Message)"
+            Write-Host "❌ Git 環境檢查失敗: $($_.Exception.Message)"
             exit 1
           }
 
         shell: powershell
 
-      - name: 设置 PowerShell 版本
+      - name: 設置 PowerShell 版本
         run: |
-          # 设置编码
+          # 設置編碼
           [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
           $OutputEncoding = [System.Text.UTF8Encoding]::new()
           $PSDefaultParameterValues['*:Encoding'] = 'utf8'
@@ -78,9 +78,9 @@ jobs:
           }
         shell: powershell
 
-      - name: 验证环境
+      - name: 驗證環境
         run: |
-          # 根据 PowerShell 版本设置可执行文件
+          # 根據 PowerShell 版本設置可執行文件
           if ('${{ matrix.powershell-version }}' -eq '5.1') {
             $powershellExe = "powershell.exe"
           } else {
@@ -97,9 +97,9 @@ jobs:
           & $powershellExe -Command "(Get-Command git).Source"
         shell: powershell
 
-      - name: 语法检查
+      - name: 語法檢查
         run: |
-          # 根据 PowerShell 版本设置可执行文件
+          # 根據 PowerShell 版本設置可執行文件
           if ('${{ matrix.powershell-version }}' -eq '5.1') {
             $powershellExe = "powershell.exe"
           } else {
@@ -110,9 +110,9 @@ jobs:
           & $powershellExe -ExecutionPolicy Bypass -File check_syntax_detailed.ps1
         shell: powershell
 
-      - name: 脚本逻辑验证
+      - name: 腳本邏輯驗證
         run: |
-          # 根据 PowerShell 版本设置可执行文件
+          # 根據 PowerShell 版本設置可執行文件
           if ('${{ matrix.powershell-version }}' -eq '5.1') {
             $powershellExe = "powershell.exe"
           } else {
@@ -121,7 +121,7 @@ jobs:
 
           Write-Host "Validating script core logic..."
 
-          # 检查脚本能否正常启动和进行基本检查
+          # 檢查腳本能否正常啟動和進行基本檢查
           & $powershellExe -Command "
             try {
               # Test Git detection
@@ -171,9 +171,9 @@ jobs:
           "
         shell: powershell
 
-      - name: 测试脚本兼容性
+      - name: 測試腳本相容性
         run: |
-          # 根据 PowerShell 版本设置可执行文件
+          # 根據 PowerShell 版本設置可執行文件
           if ('${{ matrix.powershell-version }}' -eq '5.1') {
             $powershellExe = "powershell.exe"
           } else {
@@ -182,20 +182,20 @@ jobs:
 
           Write-Host "Testing script compatibility with PowerShell ${{ matrix.powershell-version }}..."
 
-          # 测试帮助信息
+          # 測試幫助資訊
           & $powershellExe -Command "Get-Help ./apply_git_language_pack.ps1 -ErrorAction SilentlyContinue" | Out-Null
 
-          # 重置退出代码（Get-Help 可能返回非零退出代码）
+          # 重設退出代碼（Get-Help 可能返回非零退出代碼）
           $LASTEXITCODE = 0
 
-          # 测试脚本能否正常启动
+          # 測試腳本能否正常啟動
           Write-Host "✅ PowerShell ${{ matrix.powershell-version }} compatibility test passed"
         shell: powershell
 
-      - name: 清理测试环境
+      - name: 清理測試環境
         if: always()
         run: |
-          # 清理临时文件
+          # 清理臨時文件
           Get-ChildItem "$env:TEMP\git-lang-pack*" -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
           Get-ChildItem "$env:TEMP\build-*.zip" -ErrorAction SilentlyContinue | Remove-Item -Force
 
@@ -203,32 +203,32 @@ jobs:
         shell: powershell
 
   generate-test-summary:
-    name: 生成测试报告
+    name: 生成測試報告
     if: always()
     needs: test-powershell-script
     runs-on: windows-latest
 
     steps:
-      - name: 生成测试摘要
+      - name: 生成測試摘要
         run: |
-          echo "# PowerShell 脚本测试报告" >> $GITHUB_STEP_SUMMARY
+          echo "# PowerShell 腳本測試報告" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 测试状态概览" >> $GITHUB_STEP_SUMMARY
+          echo "## 測試狀態概覽" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 测试项目 | 状态 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 測試項目 | 狀態 |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Windows PowerShell 5.1 | ${{ contains(needs.test-powershell-script.result, 'success') && '✅ 通过' || '❌ 失败' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| PowerShell 7.2 | ${{ contains(needs.test-powershell-script.result, 'success') && '✅ 通过' || '❌ 失败' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Windows PowerShell 5.1 | ${{ contains(needs.test-powershell-script.result, 'success') && '✅ 通過' || '❌ 失敗' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PowerShell 7.2 | ${{ contains(needs.test-powershell-script.result, 'success') && '✅ 通過' || '❌ 失敗' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 测试环境" >> $GITHUB_STEP_SUMMARY
+          echo "## 測試環境" >> $GITHUB_STEP_SUMMARY
           echo "- PowerShell 版本: 5.1 (Windows PowerShell), 7.2 (PowerShell Core)" >> $GITHUB_STEP_SUMMARY
-          echo "- 操作系统: Windows Server (GitHub Actions)" >> $GITHUB_STEP_SUMMARY
-          echo "- Git: 系统默认版本" >> $GITHUB_STEP_SUMMARY
+          echo "- 操作系統: Windows Server (GitHub Actions)" >> $GITHUB_STEP_SUMMARY
+          echo "- Git: 系統默認版本" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 测试内容" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ PowerShell 脚本语法检查" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 脚本逻辑功能验证" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 多版本 PowerShell 兼容性 (5.1, 7.2)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Git 环境检测和版本验证" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 错误处理机制测试" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Windows 环境兼容性" >> $GITHUB_STEP_SUMMARY
+          echo "## 測試內容" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ PowerShell 腳本語法檢查" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ 腳本邏輯功能驗證" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ 多版本 PowerShell 相容性 (5.1, 7.2)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Git 環境檢測和版本驗證" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ 錯誤處理機制測試" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Windows 環境相容性" >> $GITHUB_STEP_SUMMARY
