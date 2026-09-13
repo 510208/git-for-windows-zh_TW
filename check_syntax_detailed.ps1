@@ -1,4 +1,4 @@
-# PowerShell 腳本語法檢查工具
+﻿# PowerShell 腳本語法檢查工具
 # 用於 GitHub Actions 自動化測試
 
 $ErrorActionPreference = 'Stop'
