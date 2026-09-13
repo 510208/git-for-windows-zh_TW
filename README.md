@@ -58,7 +58,7 @@ git status
 
 #### 3. 設定環境變數
 
-將 Git bash 環境中的 `LANG` 環境變數設定為 `zh_CN.UTF-8`：
+將 Git bash 環境中的 `LANG` 環境變數設定為 `zh_TW.UTF-8`：
 
 ##### 方式 1：bash profile
 
@@ -71,7 +71,7 @@ git status
 2. 點選［進階系統設定］ > ［環境變數］。
 3. 新建環境變數：
    - **變數名稱**：`LANG`
-   - **變數值**：`zh_CN.UTF-8`
+   - **變數值**：`zh_TW.UTF-8`
 
 #### 4. 設定 Git 編碼
 
@@ -93,7 +93,7 @@ git config --global i18n.logoutputencoding utf-8
 <details>
 <summary>輸出仍為英文？</summary>
 
-  - 確認 `LANG` 環境變數已設定為 `zh_CN.UTF-8`。請注意，在某次**版本更新**後，**全新安裝**的 git 包裝器不再讀取 bash profile，如果您使用 Powershell 等其他 Shell，請考慮在您的 Shell profile 中新增對應環境變數設定語句。
+  - 確認 `LANG` 環境變數已設定為 `zh_TW.UTF-8`。請注意，在某次**版本更新**後，**全新安裝**的 git 包裝器不再讀取 bash profile，如果您使用 Powershell 等其他 Shell，請考慮在您的 Shell profile 中新增對應環境變數設定語句。
   - 確認語言檔案正確安裝。
   - 重啟 Git Bash。
 
