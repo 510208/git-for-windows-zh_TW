@@ -1,88 +1,88 @@
-name: 生成并发布语言包
+name: 生成並發布語言包
 
 on:
   schedule:
-    - cron: "0 0 * * *" # 每天UTC时间凌晨0点运行
-  workflow_dispatch: # 允许手动触发工作流
+    - cron: "0 0 * * *" # 每天UTC時間凌晨0點運行
+  workflow_dispatch: # 允許手動觸發工作流
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
     
-    # 添加超时设置，防止工作流无限运行
+    # 添加超時設置，防止工作流無限運行
     timeout-minutes: 30
 
-    # 自动化脚本已归入 scripts/，所有 run 步骤默认在该目录执行
+    # 自動化腳本已歸入 scripts/，所有 run 步驟預設在該目錄執行
     defaults:
       run:
         working-directory: scripts
 
     steps:
-      - name: 检出仓库代码
+      - name: 檢出倉庫代碼
         uses: actions/checkout@v6
 
-      - name: 安装依赖
+      - name: 安裝依賴
         run: |
           sudo apt-get update
           sudo apt-get install -y gettext zip jq
-        # 添加错误处理
+        # 添加錯誤處理
         continue-on-error: false
 
-      - name: 为脚本赋予执行权限
+      - name: 為腳本賦予執行權限
         run: chmod +x ./get_new_versions.sh ./process_versions.sh ./build.sh
 
-      - name: 获取新版本
+      - name: 獲取新版本
         id: get_new_versions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          # 添加详细日志
-          echo "开始检查新版本..."
+          # 添加詳細日誌
+          echo "開始檢查新版本..."
           ./get_new_versions.sh
-          echo "新版本检查完成"
+          echo "新版本檢查完成"
 
-      - name: 处理新版本
+      - name: 處理新版本
         if: steps.get_new_versions.outputs.has_new_versions == 'true'
         id: process_versions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          # 添加详细日志
-          echo "开始处理新版本..."
+          # 添加詳細日誌
+          echo "開始處理新版本..."
           ./process_versions.sh
-          echo "新版本处理完成"
+          echo "新版本處理完成"
 
-      # 添加工作运行摘要
-      - name: 生成工作流运行摘要
+      # 添加工作運行摘要
+      - name: 生成工作流運行摘要
         if: always()
         run: |
-          echo "### 语言包构建状态: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "### 語言包構建狀態: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ steps.get_new_versions.outputs.has_new_versions }}" == "true" ]]; then
-            echo "✅ 发现并处理了新版本" >> $GITHUB_STEP_SUMMARY
+            echo "✅ 發現並處理了新版本" >> $GITHUB_STEP_SUMMARY
             if [[ -f "new_versions.txt" ]]; then
-              echo "待处理的版本:" >> $GITHUB_STEP_SUMMARY
+              echo "待處理的版本:" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               cat new_versions.txt >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
             fi
             
-            # 添加处理结果摘要
+            # 添加處理結果摘要
             if [[ -n "${{ steps.process_versions.outputs.total_success }}" ]]; then
-              echo "#### 处理结果" >> $GITHUB_STEP_SUMMARY
-              echo "* 成功处理的版本数: ${{ steps.process_versions.outputs.total_success }}" >> $GITHUB_STEP_SUMMARY
-              echo "* 失败处理的版本数: ${{ steps.process_versions.outputs.total_failed }}" >> $GITHUB_STEP_SUMMARY
+              echo "#### 處理結果" >> $GITHUB_STEP_SUMMARY
+              echo "* 成功處理的版本數: ${{ steps.process_versions.outputs.total_success }}" >> $GITHUB_STEP_SUMMARY
+              echo "* 失敗處理的版本數: ${{ steps.process_versions.outputs.total_failed }}" >> $GITHUB_STEP_SUMMARY
               
               if [[ -n "${{ steps.process_versions.outputs.successful_versions }}" ]]; then
                 echo "成功的版本: ${{ steps.process_versions.outputs.successful_versions }}" >> $GITHUB_STEP_SUMMARY
               fi
               
               if [[ -n "${{ steps.process_versions.outputs.failed_versions }}" ]]; then
-                echo "❌ 失败的版本: ${{ steps.process_versions.outputs.failed_versions }}" >> $GITHUB_STEP_SUMMARY
+                echo "❌ 失敗的版本: ${{ steps.process_versions.outputs.failed_versions }}" >> $GITHUB_STEP_SUMMARY
               fi
             fi
           else
-            echo "ℹ️ 未发现新版本" >> $GITHUB_STEP_SUMMARY
+            echo "ℹ️ 未發現新版本" >> $GITHUB_STEP_SUMMARY
           fi
