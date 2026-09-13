@@ -12,7 +12,11 @@ log_error() {
 }
 
 log_success() {
-  echo "SUCCESS:  $1"
+  echo "SUCCESS: $1"
+}
+
+log_warn() {
+  echo "   WARN: $1"
 }
 
 handle_error() {
@@ -56,10 +60,11 @@ if [ ! -f "$dir/po/zh_TW.po" ]; then
   exit 1
 fi
 
-if [ ! -f "$dir/git-gui/po/zh_tw.po" ]; then
-  log_error "未找到翻譯檔案 $dir/git-gui/po/zh_tw.po"
-  exit 1
-fi
+log_warn "已停用繁體中文的git-gui檢查，因為Git並未提供"
+# if [ ! -f "$dir/git-gui/po/zh_tw.po" ]; then
+#   log_error "未找到翻譯檔案 $dir/git-gui/po/zh_tw.po"
+#   exit 1
+# fi
 
 if [ ! -f "$dir/gitk-git/po/zh_tw.po" ]; then
   log_error "未找到翻譯檔案 $dir/gitk-git/po/zh_tw.po"
@@ -68,11 +73,12 @@ fi
 
 # 2. 定義繁體中文的目標目錄 (zh_TW)
 modir="$outdir/mingw64/share/locale/zh_TW/LC_MESSAGES"
-guidir="$outdir/mingw64/share/git-gui/lib/msgs"
+# guidir="$outdir/mingw64/share/git-gui/lib/msgs"
 gitkdir="$outdir/mingw64/share/gitk/lib/msgs"
 
 log_info "建立輸出目錄結構..."
-mkdir -p "$modir" "$guidir" "$gitkdir"
+# mkdir -p "$modir" "$guidir" "$gitkdir"
+mkdir -p "$modir" "$gitkdir"
 
 log_info "編譯本地化檔案..."
 log_info "編譯 git.mo..."
@@ -82,12 +88,13 @@ if ! msgfmt -o "$modir/git.mo" "$dir/po/zh_TW.po"; then
   exit 1
 fi
 
-log_info "編譯 git-gui 本地化檔案..."
-# 4. 指定 zh_TW 語系編譯 git-gui
-if ! msgfmt --tcl -l zh_TW -d "$guidir" "$dir/git-gui/po/zh_tw.po"; then
-  log_error "編譯 git-gui 本地化檔案失敗"
-  exit 1
-fi
+log_warn "已停用繁體中文的git-gui編譯，因為Git並未提供"
+# log_info "編譯 git-gui 本地化檔案..."
+# # 4. 指定 zh_TW 語系編譯 git-gui
+# if ! msgfmt --tcl -l zh_TW -d "$guidir" "$dir/git-gui/po/zh_tw.po"; then
+#   log_error "編譯 git-gui 本地化檔案失敗"
+#   exit 1
+# fi
 
 log_info "編譯 gitk 本地化檔案..."
 # 5. 指定 zh_TW 語系編譯 gitk
