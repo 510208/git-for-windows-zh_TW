@@ -8,7 +8,10 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    
+
+    permissions:
+      contents: write
+
     # 添加超時設置，防止工作流無限運行
     timeout-minutes: 30
 
