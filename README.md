@@ -114,6 +114,43 @@ git config --global i18n.logoutputencoding utf-8
 
 </details>
 
+<details>
+<summary>找不到適合的版本？</summary>
+
+倘若Releases中並沒有您需要版本的預編譯文件，您可以自己編譯之。
+
+如果需要自行編譯需要的版本，請遵照以下方式操作：
+
+1. 準備一個可用的Linux虛擬機，已測試過的有Ubuntu與Arch Linux，您當穰也可以使用其他的虛擬機
+2. 在虛擬機中安裝需要的package，您可以執行以下指令來安裝對應package：
+```bash
+# For Ubuntu and other Debian distro
+sudo apt-get update
+sudo apt-get install -y gettext zip jq
+
+# For Arch Linux
+sudo pacman -Syu
+sudo pacman -S gettext zip jq
+```
+3. 使用git克隆此儲存庫或直接下載zip版本：
+```bash
+$ git clone https://github.com/510208/git-for-windows-zh_TW
+```
+4. 進入專案的scripts目錄，並執行build.sh命令，後方附上需要的git版本：
+```bash
+$ ./build.sh <版本>
+```
+如果您不知道要用甚麼版本，請在您的git中執行
+```bash
+$ git -v
+git version 2.55.0.windows.5
+```
+如果您的git正在正常運作，應該會看到如上的訊息，在此例中所需的`<版本>`即是`2.55.0.windows.5`，也就是您需要執行`./build.sh 2.55.0.windows.5`
+
+5. 編譯腳本執行完成後，在script目錄下將會生成一個zip和一個tar.gz檔案，只需將zip檔案取出並按照手動安裝的步驟操作即可。
+
+</details>
+
 ## 注意事項
 
 - **版本符合**：確保語言檔案版本與 Git 版本一致。
