@@ -150,7 +150,7 @@
 
     $filesToBackup = @(
         (Join-Path $gitInstallDir "mingw64\share\locale\zh_TW\LC_MESSAGES\git.mo"),
-        (Join-Path $gitInstallDir "mingw64\share\git-gui\lib\msgs\zh_tw.msg"),
+        # (Join-Path $gitInstallDir "mingw64\share\git-gui\lib\msgs\zh_tw.msg"),
         (Join-Path $gitInstallDir "mingw64\share\gitk\lib\msgs\zh_tw.msg")
     )
 
