@@ -2,20 +2,20 @@ name: 測試 PowerShell 安裝腳本
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
     paths:
-      - 'apply_git_language_pack.ps1'
-      - 'install.ps1'
-      - 'check_syntax_detailed.ps1'
-      - '.github/workflows/test-script.yml'
+      - "apply_git_language_pack.ps1"
+      - "install.ps1"
+      - "check_syntax_detailed.ps1"
+      - ".github/workflows/test-script.yml"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'apply_git_language_pack.ps1'
-      - 'install.ps1'
-      - 'check_syntax_detailed.ps1'
-      - '.github/workflows/test-script.yml'
-  workflow_dispatch:  # 允許手動觸發
+      - "apply_git_language_pack.ps1"
+      - "install.ps1"
+      - "check_syntax_detailed.ps1"
+      - ".github/workflows/test-script.yml"
+  workflow_dispatch: # 允許手動觸發
 
 jobs:
   test-powershell-script:
@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        powershell-version: ['5.1', '7.2']
+        powershell-version: ["5.1", "7.2"]
 
     steps:
       - name: 檢出代碼
@@ -44,19 +44,19 @@ jobs:
           # 驗證 Git 是否可用
           try {
             $gitCommand = Get-Command git -ErrorAction Stop
-            Write-Host "✅ 找到 Git: $($gitCommand.Source)"
+            Write-Host "找到 Git: $($gitCommand.Source)"
 
             $gitVersion = git --version
-            Write-Host "✅ Git 版本: $gitVersion"
+            Write-Host "Git 版本: $gitVersion"
 
             # 獲取 Git 安裝目錄
             $gitPath = $gitCommand.Source
             $gitDir = Split-Path $gitPath -Parent
             $gitInstallDir = Split-Path $gitDir -Parent
-            Write-Host "✅ Git 安裝目錄: $gitInstallDir"
+            Write-Host "Git 安裝目錄: $gitInstallDir"
 
           } catch {
-            Write-Host "❌ Git 環境檢查失敗: $($_.Exception.Message)"
+            Write-Host "Git 環境檢查失敗: $($_.Exception.Message)"
             exit 1
           }
 
@@ -126,14 +126,14 @@ jobs:
             try {
               # Test Git detection
               `$gitCommand = Get-Command git -ErrorAction Stop
-              Write-Host '✅ Git detection OK: ' `$gitCommand.Source
+              Write-Host 'Git detection OK: ' `$gitCommand.Source
 
               # Test version retrieval
               `$gitVersionOutput = git --version
               if (`$gitVersionOutput -match 'git version (\d+\.\d+\.\d+)') {
-                Write-Host '✅ Git version retrieval OK: ' `$Matches[1]
+                Write-Host 'Git version retrieval OK: ' `$Matches[1]
               } else {
-                Write-Host '❌ Git version parsing failed'
+                Write-Host 'Git version parsing failed'
                 exit 1
               }
 
@@ -143,9 +143,9 @@ jobs:
 
               foreach (`$item in `$requiredItems) {
                 if (`$content -match [regex]::Escape(`$item)) {
-                  Write-Host \`"✅ Found required component in apply_git_language_pack.ps1: `$item\`"
+                  Write-Host \`"Found required component in apply_git_language_pack.ps1: `$item\`"
                 } else {
-                  Write-Host \`"❌ Missing required component in apply_git_language_pack.ps1: `$item\`"
+                  Write-Host \`"Missing required component in apply_git_language_pack.ps1: `$item\`"
                   exit 1
                 }
               }
@@ -156,16 +156,16 @@ jobs:
 
               foreach (`$item in `$installRequiredItems) {
                 if (`$installContent -match [regex]::Escape(`$item)) {
-                  Write-Host \`"✅ Found required component in install.ps1: `$item\`"
+                  Write-Host \`"Found required component in install.ps1: `$item\`"
                 } else {
-                  Write-Host \`"❌ Missing required component in install.ps1: `$item\`"
+                  Write-Host \`"Missing required component in install.ps1: `$item\`"
                   exit 1
                 }
               }
 
-              Write-Host '🎉 Script logic validation passed'
+              Write-Host 'Script logic validation passed'
             } catch {
-              Write-Host \`"❌ Validation failed: `$_\`"
+              Write-Host \`"Validation failed: `$_\`"
               exit 1
             }
           "
@@ -189,7 +189,7 @@ jobs:
           $LASTEXITCODE = 0
 
           # 測試腳本能否正常啟動
-          Write-Host "✅ PowerShell ${{ matrix.powershell-version }} compatibility test passed"
+          Write-Host "PowerShell ${{ matrix.powershell-version }} compatibility test passed"
         shell: powershell
 
       - name: 清理測試環境
@@ -217,8 +217,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| 測試項目 | 狀態 |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Windows PowerShell 5.1 | ${{ contains(needs.test-powershell-script.result, 'success') && '✅ 通過' || '❌ 失敗' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| PowerShell 7.2 | ${{ contains(needs.test-powershell-script.result, 'success') && '✅ 通過' || '❌ 失敗' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Windows PowerShell 5.1 | ${{ contains(needs.test-powershell-script.result, 'success') && '[v] 通過' || '[x] 失敗' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PowerShell 7.2 | ${{ contains(needs.test-powershell-script.result, 'success') && '[v] 通過' || '[x] 失敗' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 測試環境" >> $GITHUB_STEP_SUMMARY
           echo "- PowerShell 版本: 5.1 (Windows PowerShell), 7.2 (PowerShell Core)" >> $GITHUB_STEP_SUMMARY
@@ -226,9 +226,9 @@ jobs:
           echo "- Git: 系統默認版本" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 測試內容" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ PowerShell 腳本語法檢查" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 腳本邏輯功能驗證" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 多版本 PowerShell 相容性 (5.1, 7.2)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Git 環境檢測和版本驗證" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ 錯誤處理機制測試" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Windows 環境相容性" >> $GITHUB_STEP_SUMMARY
+          echo "- [v] PowerShell 腳本語法檢查" >> $GITHUB_STEP_SUMMARY
+          echo "- [v] 腳本邏輯功能驗證" >> $GITHUB_STEP_SUMMARY
+          echo "- [v] 多版本 PowerShell 相容性 (5.1, 7.2)" >> $GITHUB_STEP_SUMMARY
+          echo "- [v] Git 環境檢測和版本驗證" >> $GITHUB_STEP_SUMMARY
+          echo "- [v] 錯誤處理機制測試" >> $GITHUB_STEP_SUMMARY
+          echo "- [v] Windows 環境相容性" >> $GITHUB_STEP_SUMMARY
